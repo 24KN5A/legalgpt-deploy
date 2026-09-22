@@ -1,0 +1,32 @@
+# Extra dependencies for the evaluation module ONLY.
+# Install from backend/ with your existing venv active:
+#   pip install -r scripts/evaluation/requirements-eval.txt
+#
+# Kept deliberately minimal:
+#  - httpx        -> already in backend/requirements.txt (talks to the /chat API)
+#  - scikit-learn -> accuracy/precision/recall/F1/confusion_matrix
+#                    Extended: balanced_accuracy, MCC, ROC-AUC (all in sklearn)
+#  - sentence-transformers -> already in backend/requirements.txt (reused for
+#    answer-similarity scoring AND new RAGAS-style metrics — no new model download)
+#  - numpy        -> already installed as sentence-transformers dependency
+#                    (used for cosine similarity computation)
+#
+# Deliberately NOT included:
+#  - rouge-score  -> evaluate.py has a small built-in pure-Python ROUGE-L
+#                    implementation instead, so you don't need nltk's data
+#                    download on top of everything else on Windows.
+#  - bert-score   -> would pull in a second, much larger model download just
+#                    for one metric; sentence-transformers cosine similarity
+#                    (already used by your embedding pipeline) covers the
+#                    same "semantic closeness" need with what's already
+#                    installed. Add it yourself if your guide specifically
+#                    requires BERTScore in the report.
+#  - ragas        -> the official RAGAS library requires OpenAI/Anthropic API
+#                    keys for LLM-based scoring. We implement the same metrics
+#                    using the embedding model already present (zero API cost).
+#  - nli-models   -> Full RAGAS faithfulness uses NLI claim-checking. This
+#                    requires a cross-encoder model (e.g. cross-encoder/nli-
+#                    deberta-v3-small). Add when LLM/NLI is available.
+#                    See TODO [NLI-FAITHFULNESS] in evaluate.py.
+
+scikit-learn==1.6.1

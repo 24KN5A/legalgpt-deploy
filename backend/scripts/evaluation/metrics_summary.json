@@ -1,0 +1,68 @@
+{
+  "num_total_rows": 100,
+  "num_scored": 100,
+  "num_skipped_not_ingested": 0,
+  "skipped_expected_documents": [],
+  "classification_metrics": {
+    "description": "y_true = should the system answer confidently (Should_Answer column); y_pred = did the system actually answer confidently (no refusal phrase, sources retrieved). confusion_matrix rows/cols ordered [answered, declined].",
+    "accuracy": 0.63,
+    "precision": 0.9778,
+    "recall": 0.55,
+    "f1": 0.704,
+    "confusion_matrix": [
+      [
+        44,
+        36
+      ],
+      [
+        1,
+        19
+      ]
+    ],
+    "balanced_accuracy": 0.75,
+    "mcc": 0.402,
+    "roc_auc": null,
+    "roc_auc_note": "Not computed: /chat API returns no confidence scores. Add probability output to enable this."
+  },
+  "retrieval_metrics": {
+    "description": "Computed only over Should_Answer=True rows that were ingested. Recall@K equals Hit Rate under single-document annotations \u2014 see TODO [MULTI-DOC] to upgrade.",
+    "mean_precision_at_k": 0.465,
+    "mean_recall_at_k": 0.7625,
+    "hit_rate": 0.7625,
+    "mean_mrr": 0.6304,
+    "mean_ndcg_at_k": 0.6633
+  },
+  "answer_quality_metrics": {
+    "description": "similarity via sentence-transformers cosine (all-MiniLM-L6-v2); answer_quality_accuracy = fraction with similarity >= 0.55",
+    "mean_semantic_similarity": 0.5677,
+    "mean_rouge_l_f1": 0.1395,
+    "answer_quality_accuracy": 0.5375
+  },
+  "generation_metrics": {
+    "description": "APPROXIMATIONS inspired by RAGAS (EACL 2024). question_answer_similarity = cosine(question, answer) \u2014 proxy for Context Relevance. reference_answer_similarity = cosine(expected, generated) \u2014 proxy for answer quality. faithfulness_nli = None \u2014 requires chunk text + NLI model (see TODO [NLI-FAITHFULNESS]). hallucination_rate = Type A only (answered when should decline).",
+    "question_answer_similarity": 0.7842,
+    "reference_answer_similarity": 0.617,
+    "faithfulness_nli": null,
+    "hallucination_rate": 0.0222,
+    "hallucinated_count": 1,
+    "total_answered": 45
+  },
+  "citation_metrics": {
+    "description": "Evaluated on Should_Answer=True rows where system_answered=True. correct = retrieved doc matches Expected_Document (Jaccard >= 0.34). incorrect = sources returned but none match. missing = no sources at all.",
+    "citation_accuracy": 0.9091,
+    "incorrect_citation_rate": 0.0909,
+    "missing_citation_rate": 0.0,
+    "n_correct": 40,
+    "n_incorrect": 4,
+    "n_missing": 0,
+    "n_total_answered_answerable": 44
+  },
+  "runtime_metrics": {
+    "description": "Total round-trip latency per /chat call measured client-side. Retrieval and generation times are not separately measurable from the atomic /chat endpoint \u2014 see TODO [TIMING].",
+    "avg_total_time_ms": 6920.3,
+    "avg_retrieval_time_ms": null,
+    "avg_generation_time_ms": null,
+    "n_timed_rows": 100
+  },
+  "sim_threshold_used": "0.55"
+}

@@ -1,0 +1,34 @@
+# --- Python ---
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Environment / secrets ---
+.env
+backend/.env
+
+# --- Logs ---
+*.log
+backend/logs/
+
+# --- Runtime data (DB + vector store) ---
+backend/storage/
+
+# --- Uploaded / ingested documents ---
+backend/uploads/
+
+# --- Node / frontend ---
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# --- IDE ---
+.vscode/
+.idea/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
