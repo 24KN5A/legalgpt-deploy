@@ -384,37 +384,37 @@ export default function ChatPage() {
         )}
       </AnimatePresence>
 
-      <div className="flex h-[calc(100vh-8.5rem)] gap-6">
+      <div className="flex h-[calc(100dvh-13.5rem)] md:h-[calc(100vh-8.5rem)] gap-4 md:gap-6 min-h-[350px]">
         {/* Desktop Sidebar panel */}
         <GlassCard className="hidden w-64 shrink-0 flex-col p-4 md:flex" animate={false}>
           {historyContent}
         </GlassCard>
 
         {/* Main chat area */}
-        <div className="flex flex-1 flex-col min-w-0">
-          <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto pr-1">
+        <div className="flex flex-1 flex-col min-w-0 h-full">
+          <div ref={scrollRef} className="flex-1 space-y-4 sm:space-y-5 overflow-y-auto pr-1">
             <ChatErrorBoundary>
               {messages.length === 0 ? (
-                <div className="flex h-full flex-col items-center justify-center text-center text-[var(--color-text-muted)]">
+                <div className="flex h-full flex-col items-center justify-center text-center text-[var(--color-text-muted)] py-6 px-2">
                   <div
-                    className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
+                    className="mb-4 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl"
                     style={{ background: "var(--color-accent-soft)" }}
                   >
-                    <Bot className="h-7 w-7" style={{ color: "var(--color-accent-strong)" }} />
+                    <Bot className="h-6 w-6 sm:h-7 sm:w-7" style={{ color: "var(--color-accent-strong)" }} />
                   </div>
-                  <p className="font-display text-xl text-[var(--color-text)]">Ask about your documents</p>
-                  <p className="mt-1.5 max-w-sm text-sm leading-relaxed">
+                  <p className="font-display text-lg sm:text-xl text-[var(--color-text)]">Ask about your documents</p>
+                  <p className="mt-1.5 max-w-sm text-xs sm:text-sm leading-relaxed text-[var(--color-text-muted)]">
                     {selectedDocId
                       ? "Scoped to a single document — answers cite exact clauses with inline sources."
                       : "Searching across all your uploaded documents with similarity threshold 0.70."}
                   </p>
-                  <div className="mt-6 flex flex-wrap justify-center gap-2">
+                  <div className="mt-5 sm:mt-6 flex flex-wrap justify-center gap-1.5 sm:gap-2 max-w-lg">
                     {SUGGESTED_PROMPTS.map((p) => (
                       <button
                         key={p}
                         onClick={() => sendMessage(p)}
-                        className="rounded-full border px-3.5 py-1.5 text-xs transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-text)]"
-                        style={{ borderColor: "var(--color-border)" }}
+                        className="rounded-full border px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-text)]"
+                        style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
                       >
                         {p}
                       </button>
@@ -440,7 +440,7 @@ export default function ChatPage() {
           </div>
 
           {/* Input area */}
-          <div className="mt-4 flex items-end gap-3">
+          <div className="mt-2 sm:mt-4 flex items-end gap-2 sm:gap-3 shrink-0">
             <div className="flex-1 relative">
               <textarea
                 value={input}
@@ -451,9 +451,9 @@ export default function ChatPage() {
                     handleSend();
                   }
                 }}
-                placeholder="Ask a question about your documents… (Enter to send, Shift+Enter for newline)"
+                placeholder="Ask anything about clauses, risks, or terms… (Enter to send)"
                 rows={1}
-                className="w-full max-h-36 resize-none rounded-2xl border px-4 py-3 text-sm focus:outline-none transition-colors leading-relaxed"
+                className="w-full max-h-32 sm:max-h-36 resize-none rounded-2xl border px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm focus:outline-none transition-colors leading-relaxed"
                 style={{
                   borderColor: "var(--color-border)",
                   background: "var(--color-surface)",
@@ -473,7 +473,8 @@ export default function ChatPage() {
               onClick={handleSend}
               loading={sending}
               disabled={!input.trim() || input.length > 8000}
-              style={{ borderRadius: "1rem", padding: "0.75rem 1rem" }}
+              className="btn-tactile shrink-0"
+              style={{ borderRadius: "1rem", padding: "0.65rem 0.9rem" }}
             >
               <Send className="h-4 w-4" />
             </Button>

@@ -154,20 +154,24 @@ export interface AuthResponse {
 
 export interface SendOTPResponse {
   message: string;
-  phone_number: string;
-  expires_in_seconds: number;
+  phone_number?: string;
+  recipient?: string;
+  channel?: "email" | "sms" | "mock" | string;
+  expires_in_seconds?: number;
   debug_otp?: string;
 }
 
 export interface VerifyOTPResponse {
   message: string;
   reset_token: string;
-  expires_in_minutes: number;
+  expires_in_seconds?: number;
+  expires_in_minutes?: number;
 }
 
 export interface ResetPasswordResponse {
   message: string;
-  user: User;
+  user?: User;
+  success?: boolean;
 }
 
 // ---------- Evaluation ----------

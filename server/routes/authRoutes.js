@@ -112,22 +112,32 @@ router.get('/me', requireAuth, (req, res) => {
 router.post('/forgot-password/send-otp', async (req, res) => {
   try {
     const { email, phone_number } = req.body;
-    let query = {};
-    if (email) query.email = email.toLowerCase().trim();
-    else if (phone_number) query.$or = [{ phone_number }, { email: phone_number.toLowerCase().trim() }];
-    else {
+    const identifier = (email || phone_number || '').trim();
+
+    if (!identifier) {
       return res.status(400).json({
         error_code: 'validation_error',
-        message: 'Email or phone number is required.',
+        message: 'Email address or phone number is required.',
       });
     }
 
-    const user = await User.findOne(query);
+    const cleanEmail = identifier.toLowerCase();
+    const cleanPhoneDigits = identifier.replace(/\D/g, '');
+
+    const orConditions = [
+      { email: cleanEmail },
+      { phone_number: identifier },
+    ];
+    if (cleanPhoneDigits.length >= 7) {
+      orConditions.push({ phone_number: cleanPhoneDigits });
+      orConditions.push({ phone_number: `+${cleanPhoneDigits}` });
+    }
+
+    const user = await User.findOne({ $or: orConditions });
     if (!user) {
-      // Return 404
       return res.status(404).json({
         error_code: 'user_not_found',
-        message: 'No registered user found with the provided contact information.',
+        message: 'No registered user found with the provided email or phone number.',
       });
     }
 
@@ -150,7 +160,8 @@ router.post('/forgot-password/send-otp', async (req, res) => {
       message: `Verification code sent to ${user.email}`,
       channel: result.channel,
       recipient: user.email,
-      debug_otp: result.debug_otp, // included in dev for convenience
+      debug_otp: result.debug_otp, // included when in dev or mock SMTP mode
+      expires_in_seconds: 600,
     });
   } catch (error) {
     console.error('[Send OTP Error]:', error);
@@ -167,35 +178,47 @@ router.post('/forgot-password/send-otp', async (req, res) => {
 router.post('/forgot-password/verify-otp', async (req, res) => {
   try {
     const { email, phone_number, otp } = req.body;
-    if (!otp) {
+    const submittedOtp = (otp || '').toString().trim();
+
+    if (!submittedOtp) {
       return res.status(400).json({
         error_code: 'validation_error',
         message: 'Verification code is required.',
       });
     }
 
-    let query = {};
-    if (email) query.email = email.toLowerCase().trim();
-    else if (phone_number) query.$or = [{ phone_number }, { email: phone_number.toLowerCase().trim() }];
-    else {
+    const identifier = (email || phone_number || '').trim();
+    if (!identifier) {
       return res.status(400).json({
         error_code: 'validation_error',
-        message: 'Email or phone number is required.',
+        message: 'Email address or phone number is required.',
       });
     }
 
-    const user = await User.findOne(query);
+    const cleanEmail = identifier.toLowerCase();
+    const cleanPhoneDigits = identifier.replace(/\D/g, '');
+
+    const orConditions = [
+      { email: cleanEmail },
+      { phone_number: identifier },
+    ];
+    if (cleanPhoneDigits.length >= 7) {
+      orConditions.push({ phone_number: cleanPhoneDigits });
+      orConditions.push({ phone_number: `+${cleanPhoneDigits}` });
+    }
+
+    const user = await User.findOne({ $or: orConditions });
     if (!user || !user.reset_otp || !user.reset_otp.code) {
       return res.status(400).json({
         error_code: 'no_pending_otp',
-        message: 'No pending verification code found. Please request a new one.',
+        message: 'No pending verification code found. Please request a new code.',
       });
     }
 
     if (new Date() > new Date(user.reset_otp.expires_at)) {
       return res.status(400).json({
         error_code: 'otp_expired',
-        message: 'Verification code has expired. Please request a new one.',
+        message: 'Verification code has expired. Please request a new code.',
       });
     }
 
@@ -206,12 +229,13 @@ router.post('/forgot-password/verify-otp', async (req, res) => {
       });
     }
 
-    if (user.reset_otp.code !== otp.trim()) {
+    if (user.reset_otp.code !== submittedOtp) {
       user.reset_otp.attempts += 1;
       await user.save();
+      const remaining = 5 - user.reset_otp.attempts;
       return res.status(400).json({
         error_code: 'invalid_otp',
-        message: 'Incorrect verification code. Please try again.',
+        message: `Incorrect verification code. ${remaining > 0 ? `${remaining} attempt(s) remaining.` : 'Code locked.'}`,
       });
     }
 
@@ -225,6 +249,7 @@ router.post('/forgot-password/verify-otp', async (req, res) => {
     return res.json({
       message: 'Verification successful. You may now reset your password.',
       reset_token,
+      expires_in_seconds: 900,
     });
   } catch (error) {
     console.error('[Verify OTP Error]:', error);
@@ -248,6 +273,13 @@ router.post('/forgot-password/reset-password', async (req, res) => {
       });
     }
 
+    if (new_password.length < 8) {
+      return res.status(400).json({
+        error_code: 'validation_error',
+        message: 'Password must be at least 8 characters long.',
+      });
+    }
+
     const user = await User.findOne({
       'reset_otp.reset_token': reset_token,
       'reset_otp.reset_token_expires_at': { $gt: new Date() },
@@ -267,6 +299,7 @@ router.post('/forgot-password/reset-password', async (req, res) => {
 
     return res.json({
       message: 'Password has been successfully updated. You can now log in.',
+      success: true,
     });
   } catch (error) {
     console.error('[Reset Password Error]:', error);

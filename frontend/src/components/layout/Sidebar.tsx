@@ -48,7 +48,7 @@ export default function Sidebar() {
     <motion.aside
       animate={{ width: collapsed ? 76 : 256 }}
       transition={{ type: "spring", stiffness: 260, damping: 28 }}
-      className="relative flex h-full shrink-0 flex-col border-r"
+      className="relative hidden md:flex h-full shrink-0 flex-col border-r"
       style={{ borderColor: "var(--color-border)", background: "var(--color-bg-elevated)" }}
     >
       <div className={clsx("flex items-center gap-3 px-5 py-6", collapsed && "justify-center px-0")}>

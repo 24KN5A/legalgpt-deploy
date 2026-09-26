@@ -90,23 +90,34 @@ export async function getMe(): Promise<User> {
   return handleResponse<User>(res);
 }
 
-export async function sendForgotPasswordOTP(phone_number: string): Promise<SendOTPResponse> {
+export async function sendForgotPasswordOTP(identifier: string): Promise<SendOTPResponse> {
+  const clean = identifier.trim();
+  const isEmail = clean.includes("@");
   const res = await fetch(`${BASE_URL}/auth/forgot-password/send-otp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ phone_number }),
+    body: JSON.stringify({
+      email: isEmail ? clean.toLowerCase() : undefined,
+      phone_number: clean,
+    }),
   });
   return handleResponse<SendOTPResponse>(res);
 }
 
 export async function verifyForgotPasswordOTP(
-  phone_number: string,
+  identifier: string,
   otp: string
 ): Promise<VerifyOTPResponse> {
+  const clean = identifier.trim();
+  const isEmail = clean.includes("@");
   const res = await fetch(`${BASE_URL}/auth/forgot-password/verify-otp`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ phone_number, otp }),
+    body: JSON.stringify({
+      email: isEmail ? clean.toLowerCase() : undefined,
+      phone_number: clean,
+      otp: otp.trim(),
+    }),
   });
   return handleResponse<VerifyOTPResponse>(res);
 }
@@ -118,7 +129,7 @@ export async function resetPasswordWithOTP(
   const res = await fetch(`${BASE_URL}/auth/forgot-password/reset-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reset_token, new_password }),
+    body: JSON.stringify({ reset_token: reset_token.trim(), new_password }),
   });
   return handleResponse<ResetPasswordResponse>(res);
 }

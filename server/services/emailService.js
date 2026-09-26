@@ -6,15 +6,16 @@ let transporter = null;
 function getTransporter() {
   if (transporter) return transporter;
 
-  const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USERNAME;
-  const pass = process.env.SMTP_PASSWORD;
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const user = (process.env.SMTP_USERNAME || process.env.SMTP_USER || '').trim();
+  const pass = (process.env.SMTP_PASSWORD || process.env.SMTP_PASS || '').trim();
 
   if (host && user && pass) {
+    const port = Number(process.env.SMTP_PORT) || 587;
     transporter = nodemailer.createTransport({
       host,
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: Number(process.env.SMTP_PORT) === 465,
+      port,
+      secure: port === 465,
       auth: { user, pass },
     });
     console.log(`[Email] SMTP Transporter configured for: ${user}`);
@@ -60,8 +61,10 @@ export async function sendPasswordResetEmail(recipientEmail, otpCode, recipientN
 
   if (mailer) {
     try {
+      const fromName = process.env.SMTP_FROM_NAME || 'LegalGPT Support';
+      const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USERNAME || process.env.SMTP_USER;
       await mailer.sendMail({
-        from: `"${process.env.SMTP_FROM_NAME || 'LegalGPT Support'}" <${process.env.SMTP_USERNAME}>`,
+        from: `"${fromName}" <${fromEmail}>`,
         to: recipientEmail,
         subject,
         html: htmlContent,

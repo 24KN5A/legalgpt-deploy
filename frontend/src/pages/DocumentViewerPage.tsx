@@ -236,10 +236,10 @@ export default function DocumentViewerPage() {
         </Link>
 
         {/* Interactive Tabs */}
-        <div className="flex items-center gap-1.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]/70 p-1 backdrop-blur-md">
+        <div className="flex items-center gap-1.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]/70 p-1 backdrop-blur-md overflow-x-auto max-w-full">
           <button
             onClick={() => setActiveTab("preview")}
-            className={`flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 sm:gap-2 rounded-lg px-2.5 sm:px-3.5 py-1.5 text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
               activeTab === "preview"
                 ? "bg-[var(--color-accent)] text-black font-semibold shadow-sm"
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
@@ -250,14 +250,14 @@ export default function DocumentViewerPage() {
           </button>
           <button
             onClick={() => setActiveTab("audit")}
-            className={`flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 sm:gap-2 rounded-lg px-2.5 sm:px-3.5 py-1.5 text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
               activeTab === "audit"
                 ? "bg-[var(--color-accent)] text-black font-semibold shadow-sm"
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
             }`}
           >
             <ShieldCheck className="h-3.5 w-3.5" />
-            Risk Audit & Scoring
+            Risk Audit
             {analysis && (
               <span className="rounded-full bg-black/20 px-1.5 py-0.2 text-[10px] font-bold">
                 {analysis.overall_risk_score ?? 20}%
@@ -266,7 +266,7 @@ export default function DocumentViewerPage() {
           </button>
           <button
             onClick={() => setActiveTab("drafter")}
-            className={`flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 sm:gap-2 rounded-lg px-2.5 sm:px-3.5 py-1.5 text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
               activeTab === "drafter"
                 ? "bg-[var(--color-accent)] text-black font-semibold shadow-sm"
                 : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"

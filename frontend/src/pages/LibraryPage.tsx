@@ -81,62 +81,64 @@ export default function LibraryPage() {
   return (
     <AppShell title="Document Library">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative w-full max-w-sm">
+        <div className="relative w-full sm:max-w-xs md:max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-faint)]" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search documents..."
-            className="w-full rounded-xl border py-2.5 pl-10 pr-4 text-sm focus:outline-none"
+            className="w-full rounded-xl border py-2.5 pl-10 pr-4 text-xs sm:text-sm focus:outline-none"
             style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as DocumentStatus | "all")}
-            className="rounded-xl border px-3 py-2 text-xs focus:outline-none"
-            style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
-          >
-            <option value="all">All statuses</option>
-            <option value="ready">Ready</option>
-            <option value="processing">Processing</option>
-            <option value="uploaded">Uploaded</option>
-            <option value="failed">Failed</option>
-          </select>
-
-          <button
-            onClick={() =>
-              setSortKey((k) => (k === "newest" ? "oldest" : k === "oldest" ? "name" : k === "name" ? "size" : "newest"))
-            }
-            className="flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs capitalize"
-            style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
-          >
-            <ArrowUpDown className="h-3.5 w-3.5" /> {sortKey}
-          </button>
-
-          <div className="flex overflow-hidden rounded-xl border" style={{ borderColor: "var(--color-border)" }}>
-            <button
-              onClick={() => setViewMode("grid")}
-              className="px-2.5 py-2"
-              style={{ background: viewMode === "grid" ? "var(--color-accent-soft)" : undefined }}
-              aria-label="Grid view"
+        <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as DocumentStatus | "all")}
+              className="rounded-xl border px-3 py-2 text-xs focus:outline-none"
+              style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
             >
-              <LayoutGrid className="h-4 w-4" style={{ color: viewMode === "grid" ? "var(--color-accent-strong)" : "var(--color-text-muted)" }} />
-            </button>
+              <option value="all">All statuses</option>
+              <option value="ready">Ready</option>
+              <option value="processing">Processing</option>
+              <option value="uploaded">Uploaded</option>
+              <option value="failed">Failed</option>
+            </select>
+
             <button
-              onClick={() => setViewMode("list")}
-              className="px-2.5 py-2"
-              style={{ background: viewMode === "list" ? "var(--color-accent-soft)" : undefined }}
-              aria-label="List view"
+              onClick={() =>
+                setSortKey((k) => (k === "newest" ? "oldest" : k === "oldest" ? "name" : k === "name" ? "size" : "newest"))
+              }
+              className="flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs capitalize"
+              style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
             >
-              <List className="h-4 w-4" style={{ color: viewMode === "list" ? "var(--color-accent-strong)" : "var(--color-text-muted)" }} />
+              <ArrowUpDown className="h-3.5 w-3.5" /> {sortKey}
             </button>
+
+            <div className="flex overflow-hidden rounded-xl border" style={{ borderColor: "var(--color-border)" }}>
+              <button
+                onClick={() => setViewMode("grid")}
+                className="px-2.5 py-2"
+                style={{ background: viewMode === "grid" ? "var(--color-accent-soft)" : undefined }}
+                aria-label="Grid view"
+              >
+                <LayoutGrid className="h-4 w-4" style={{ color: viewMode === "grid" ? "var(--color-accent-strong)" : "var(--color-text-muted)" }} />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className="px-2.5 py-2"
+                style={{ background: viewMode === "list" ? "var(--color-accent-soft)" : undefined }}
+                aria-label="List view"
+              >
+                <List className="h-4 w-4" style={{ color: viewMode === "list" ? "var(--color-accent-strong)" : "var(--color-text-muted)" }} />
+              </button>
+            </div>
           </div>
 
           <Link to="/upload">
-            <Button size="sm">
+            <Button size="sm" className="btn-tactile">
               <UploadCloud className="h-4 w-4" /> Upload
             </Button>
           </Link>

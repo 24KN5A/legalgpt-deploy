@@ -141,23 +141,23 @@ export default function LandingPage() {
           >
             Retrieval-grounded legal AI
           </span>
-          <h1 className="font-display text-5xl leading-[1.05] tracking-tight lg:text-6xl">
+          <h1 className="font-display text-3xl xs:text-4xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-tight">
             Read the fine print
             <br />
             <span style={{ color: "var(--color-accent)" }}>before it reads you.</span>
           </h1>
-          <p className="mt-6 max-w-md text-lg text-[var(--color-text-muted)]">
+          <p className="mt-5 sm:mt-6 max-w-md text-base sm:text-lg text-[var(--color-text-muted)]">
             LegalGPT retrieves the exact clauses that answer your question and flags the ones
             working against you — with citations, not guesses.
           </p>
-          <div className="mt-8 flex items-center gap-4">
-            <Link to="/upload">
-              <Button size="lg">
+          <div className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+            <Link to="/upload" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full btn-tactile">
                 Analyze a document <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/dashboard">
-              <Button variant="ghost" size="lg">
+            <Link to="/dashboard" className="w-full sm:w-auto">
+              <Button variant="ghost" size="lg" className="w-full">
                 View dashboard
               </Button>
             </Link>
