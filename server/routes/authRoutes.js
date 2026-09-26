@@ -154,13 +154,18 @@ router.post('/forgot-password/send-otp', async (req, res) => {
     };
     await user.save();
 
-    const result = await sendPasswordResetEmail(user.email, otpCode, user.full_name);
+    // Dispatch email asynchronously in background so response returns in < 50ms
+    sendPasswordResetEmail(user.email, otpCode, user.full_name).catch((err) => {
+      console.error('[Background Email Send Error]:', err);
+    });
+
+    const isMock = !process.env.SMTP_USERNAME && !process.env.SMTP_USER;
 
     return res.json({
       message: `Verification code sent to ${user.email}`,
-      channel: result.channel,
+      channel: isMock ? 'mock' : 'email',
       recipient: user.email,
-      debug_otp: result.debug_otp, // included when in dev or mock SMTP mode
+      debug_otp: isMock ? otpCode : undefined,
       expires_in_seconds: 600,
     });
   } catch (error) {

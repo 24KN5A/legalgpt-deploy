@@ -16,9 +16,15 @@ function getTransporter() {
       host,
       port,
       secure: port === 465,
+      pool: true,
+      maxConnections: 3,
+      maxMessages: 100,
       auth: { user, pass },
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
-    console.log(`[Email] SMTP Transporter configured for: ${user}`);
+    console.log(`[Email] SMTP Pooled Transporter configured for: ${user}`);
   }
   return transporter;
 }
