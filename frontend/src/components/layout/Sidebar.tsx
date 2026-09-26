@@ -51,18 +51,25 @@ export default function Sidebar() {
       className="relative flex h-full shrink-0 flex-col border-r"
       style={{ borderColor: "var(--color-border)", background: "var(--color-bg-elevated)" }}
     >
-      <div className={clsx("flex items-center gap-2 px-5 py-6", collapsed && "justify-center px-0")}>
-        <Scale className="h-5 w-5 shrink-0" style={{ color: "var(--color-accent)" }} />
+      <div className={clsx("flex items-center gap-3 px-5 py-6", collapsed && "justify-center px-0")}>
+        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500/20 to-indigo-500/20 border border-[var(--color-accent-soft)] glow-accent">
+          <Scale className="h-5 w-5 shrink-0" style={{ color: "var(--color-accent-strong)" }} />
+        </div>
         <AnimatePresence>
           {!collapsed && (
-            <motion.span
+            <motion.div
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
               exit={{ opacity: 0, width: 0 }}
-              className="overflow-hidden whitespace-nowrap font-display text-lg tracking-tight"
+              className="overflow-hidden whitespace-nowrap"
             >
-              LegalGPT
-            </motion.span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-display text-lg font-bold tracking-tight">LegalGPT</span>
+                <span className="rounded-full bg-[var(--color-accent-soft)] px-1.5 py-0.5 text-[9px] font-mono font-semibold text-[var(--color-accent)] border border-[var(--color-accent-soft)]">
+                  MERN
+                </span>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

@@ -23,6 +23,8 @@ pydantic-settings==2.7.1
 # --- Database (document + chat metadata) ---
 sqlalchemy==2.0.36
 aiosqlite==0.20.0
+greenlet>=3.0.0
+
 
 # --- Vector store ---
 chromadb==0.5.23

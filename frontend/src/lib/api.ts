@@ -290,7 +290,7 @@ export async function getConversation(id: string): Promise<Conversation> {
   return handleResponse<Conversation>(res);
 }
 
-// ---------- Analysis ----------
+// ---------- Analysis & Clause Drafter ----------
 
 export async function analyzeDocument(documentId: string): Promise<ContractAnalysis> {
   const res = await fetch(`${BASE_URL}/analysis/${documentId}`, {
@@ -298,4 +298,20 @@ export async function analyzeDocument(documentId: string): Promise<ContractAnaly
     headers: { ...authHeader() },
   });
   return handleResponse<ContractAnalysis>(res);
+}
+
+export async function getDocumentAnalysis(documentId: string): Promise<ContractAnalysis> {
+  const res = await fetch(`${BASE_URL}/analysis/${documentId}`, {
+    headers: { ...authHeader() },
+  });
+  return handleResponse<ContractAnalysis>(res);
+}
+
+export async function draftClause(params: import("../types").DraftClauseParams): Promise<import("../types").DraftedClause> {
+  const res = await fetch(`${BASE_URL}/analysis/draft-clause`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeader() },
+    body: JSON.stringify(params),
+  });
+  return handleResponse<import("../types").DraftedClause>(res);
 }

@@ -68,14 +68,57 @@ export interface RiskItem {
   recommendation: string;
 }
 
+export interface KeyClauseItem {
+  title: string;
+  text: string;
+  risk_level: RiskLevel;
+  risk_reason?: string;
+  recommendation?: string;
+  page_number?: number;
+}
+
+export interface ComplianceItem {
+  check: string;
+  status: "pass" | "warning" | "fail";
+  note?: string;
+}
+
+export interface ActionItem {
+  priority: "high" | "medium" | "low";
+  action: string;
+}
+
 export interface ContractAnalysis {
+  id?: string;
   document_id: string;
-  summary: string;
-  key_clauses: string[];
-  parties: string[];
-  obligations: string[];
-  risks: RiskItem[];
-  generated_at: string;
+  executive_summary?: string;
+  summary?: string;
+  overall_risk_score?: number;
+  overall_risk_level?: RiskLevel;
+  key_clauses?: (KeyClauseItem | string)[];
+  compliance_items?: ComplianceItem[];
+  action_items?: ActionItem[];
+  parties?: string[];
+  obligations?: string[];
+  risks?: RiskItem[];
+  generated_at?: string;
+  created_at?: string;
+}
+
+export interface DraftClauseParams {
+  clauseType: string;
+  context?: string;
+  jurisdiction?: string;
+  favorParty?: 'neutral' | 'disclosing_party' | 'receiving_party' | 'service_provider' | 'client';
+  strictness?: 'standard' | 'strict' | 'friendly';
+}
+
+export interface DraftedClause {
+  clause_title: string;
+  clause_text: string;
+  plain_english_explanation: string;
+  risk_mitigations: string[];
+  negotiation_tips: string;
 }
 
 export interface HealthStatus {
@@ -85,6 +128,7 @@ export interface HealthStatus {
   llm_provider: string;
   embedding_provider: string;
   vector_store_ready: boolean;
+  database?: string;
 }
 
 export interface ApiErrorBody {

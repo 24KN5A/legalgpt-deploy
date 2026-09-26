@@ -31,10 +31,11 @@ interface DisplayMessage extends Omit<ChatMessage, "id"> {
 }
 
 const SUGGESTED_PROMPTS = [
-  "Summarize the key obligations in this document",
-  "What are the termination conditions?",
-  "Are there any clauses that seem unusually risky?",
-  "Who are the parties and what do they each owe?",
+  "⚖️ Summarize key obligations & scope",
+  "⚠️ What are the termination conditions?",
+  "🔍 Check for high-risk or one-sided clauses",
+  "🛡️ Review indemnification & arbitration",
+  "💼 Who are the parties and their liabilities?",
 ];
 
 class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string | null }> {

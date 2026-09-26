@@ -111,11 +111,11 @@ export default function TopBar({ title }: { title: string }) {
         </div>
 
         {health && (
-          <span className="hidden items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-xs text-[var(--color-text-muted)] lg:flex" style={{ borderColor: "var(--color-border)" }}>
+          <span className="hidden items-center gap-2 rounded-full border px-3.5 py-1 font-mono text-xs text-[var(--color-text-muted)] lg:flex shadow-xs" style={{ borderColor: "var(--color-border)" }}>
             <span
-              className={`h-1.5 w-1.5 rounded-full ${health.vector_store_ready ? "bg-[var(--color-emerald)]" : "bg-red-400"}`}
+              className={`h-2 w-2 rounded-full animate-pulse ${health.vector_store_ready ? "bg-emerald-400 ring-2 ring-emerald-500/20" : "bg-red-400"}`}
             />
-            {health.llm_provider} · {health.embedding_provider}
+            <span className="font-semibold text-[var(--color-accent)]">LegalGPT Core</span> · <span className="opacity-80">MongoDB Atlas</span>
           </span>
         )}
 

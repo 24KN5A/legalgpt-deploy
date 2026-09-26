@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: legalgpt-backend
+    env: node
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-flash-lite-latest
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OTP_CHANNEL
+        value: email

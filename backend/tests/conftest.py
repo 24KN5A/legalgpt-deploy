@@ -79,5 +79,13 @@ async def client():
 
 
 @pytest.fixture
-def sample_pdf_path():
-    return str(Path(__file__).resolve().parent.parent / "uploads" / "LEGALGPT_REQS.pdf")
+def sample_pdf_path(tmp_path):
+    pdf_path = tmp_path / "LEGALGPT_REQS.pdf"
+    import fitz
+    doc = fitz.open()
+    page = doc.new_page()
+    page.insert_text((50, 72), "Legal Agreement Contract terms and arbitration clause. LegalGPT requirement document.\nSection 1: The parties agree to arbitrate any disputes under standard commercial rules.\nSection 2: Payment terms shall be net 30 days.")
+    doc.save(str(pdf_path))
+    doc.close()
+    return str(pdf_path)
+
